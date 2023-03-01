@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p th:text="${showQuiz.getNameQuiz()}"></p>
+    <div class="questions_quiz" th:each="oneQuestion :${showQuiz.getQuestions()}">
+        <p th:text="${oneQuestion.getDescription()}"></p>
+        <div class="answer_question" th:each="oneAnswer :${oneQuestion.getAnswers()}">
+            <p th:text="${oneAnswer.getDescription()}"></p>
+        </div>
+    </div>
+    <a th:href="@{/quiz/{id}/edit(id=${showQuiz.getIdQuiz()})}"
+       th:text="'Edit'"></a>
+</body>
+</html>

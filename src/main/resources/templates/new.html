@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create new quiz</title>
+</head>
+<body>
+  <form method="post" th:object="${Quiz}" th:action="@{/quiz/new}">
+    <div class="main_div">
+        <div class="name_Quiz">
+            <label for="nameQuiz" th:text="'Название викторины:'"></label>
+            <input type="text" id="nameQuiz" th:field="*{nameQuiz}"/>
+        </div>
+        <button type="submit" name="save">Save quiz</button>
+    </div>
+  </form>
+</body>
+</html>

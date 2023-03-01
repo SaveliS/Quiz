@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST" th:action="@{/design}" th:object="${finalQuiz}">
+    <h1>Your result:</h1>
+    <label th:text="${'Date complete test: ' + finalQuiz.getDateCompleteQuiz()}"></label><br/>
+    <label th:text="${'Score user: ' + finalQuiz.getScoreUser()}"></label><br/>
+    <label th:text="${'Name user: ' +finalQuiz.getUserName()}"></label>
+</form>
+</body>
+</html>

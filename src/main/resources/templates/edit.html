@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form th:method="post" th:object="${editQuiz}" action="#">
+        <label for="nameQuiz" th:text="'Название викторины:'"/>
+        <input type="text" id="nameQuiz" th:field="*{nameQuiz}"/>
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <button type="submit" name="addNewQuestion">Add question</button>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="oneQuestion, statQuestion: *{questionsAsList}">
+                    <td>
+                        <input type="text" th:field="*{questionsAsList[__${statQuestion.index}__].description}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <input type="hidden"  th:field="*{idQuiz}">
+        <input type="hidden" th:field="*{questions}">
+    </form>
+</body>
+</html>
