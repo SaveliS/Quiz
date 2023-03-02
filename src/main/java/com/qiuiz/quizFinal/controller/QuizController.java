@@ -29,10 +29,14 @@ public class QuizController {
     }
 
     @RequestMapping(value = "/new", params = {"addNewQuiz"})
-    public String addNewQuiz(final Quiz quiz){
+    public String addNewQuiz(final Quiz quiz, Model model){
         log.info("Name new quiz: {}", quiz.getNameQuiz());
-        quizRepository.save(quiz);
-        return "redirect:/quiz/all";
+        log.info("ID new quiz: {}",quiz.getIdQuiz());
+        log.info("List question: {}", quiz.getQuestions());
+        quiz.getQuestions().add(new Question());
+        log.info("List after add: {}", quiz.getQuestions());
+        model.addAttribute("Quiz",quiz);
+        return "new";
     }
 
     @RequestMapping(value = "/{id}/edit", params = {"addNewQuestion"})

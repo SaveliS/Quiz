@@ -18,7 +18,7 @@ public class Quiz {
     private String nameQuiz;
 
     @OneToMany(mappedBy = "quiz")
-    private Set<Question> questions = new HashSet<>();
+    private List<Question> questions = new ArrayList<>();
 
     public Quiz( String nameQuiz) {
         this.nameQuiz = nameQuiz;
@@ -27,16 +27,12 @@ public class Quiz {
     public Quiz() {
     }
 
-    public Set<Question> getQuestions() {
+    public List<Question> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(Set<Question> questions) {
+    public void setQuestions(List<Question> questions) {
         this.questions = questions;
-    }
-
-    public List<Question> getQuestionsAsList(){
-        return new ArrayList<Question>(questions);
     }
     public int getIdQuiz() {
         return idQuiz;
