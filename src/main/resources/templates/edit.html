@@ -17,9 +17,9 @@
                 </tr>
             </thead>
             <tbody>
-                <tr th:each="oneQuestion, statQuestion: *{questionsAsList}">
+                <tr th:each="oneQuestion, statQuestion: *{questions}">
                     <td>
-                        <input type="text" th:field="*{questionsAsList[__${statQuestion.index}__].description}">
+                        <input type="text" th:field="*{questions[__${statQuestion.index}__].description}">
                     </td>
                 </tr>
             </tbody>

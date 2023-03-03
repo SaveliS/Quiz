@@ -1,5 +1,6 @@
 package com.qiuiz.quizFinal.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

@@ -1,9 +1,12 @@
 package com.qiuiz.quizFinal.controller;
 
+import com.qiuiz.quizFinal.model.Answer;
 import com.qiuiz.quizFinal.model.Question;
 import com.qiuiz.quizFinal.model.Quiz;
+import com.qiuiz.quizFinal.repository.AnswerRepository;
 import com.qiuiz.quizFinal.repository.QuestionRepository;
 import com.qiuiz.quizFinal.repository.QuizRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +15,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Controller
 @RequestMapping("/quiz")
 @SessionAttributes("Quiz")
 public class QuizController {
-
     @Autowired
     private QuizRepository quizRepository;
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
 
     @ModelAttribute("Quiz")
     public Quiz createQuiz(){
@@ -29,7 +36,7 @@ public class QuizController {
     }
 
     @RequestMapping(value = "/new", params = {"addNewQuiz"})
-    public String addNewQuiz(final Quiz quiz, Model model){
+    public String addNewQuiz(final Quiz quiz,final Question question, Model model){
         log.info("Name new quiz: {}", quiz.getNameQuiz());
         log.info("ID new quiz: {}",quiz.getIdQuiz());
         log.info("List question: {}", quiz.getQuestions());
@@ -37,6 +44,33 @@ public class QuizController {
         log.info("List after add: {}", quiz.getQuestions());
         model.addAttribute("Quiz",quiz);
         return "new";
+    }
+
+    @RequestMapping(value = "/new",params = {"addNewAnswer"})
+    public String addNewAnswer(final Quiz quiz, Model model, final HttpServletRequest req){
+        final Integer QuestionID = Integer.valueOf(req.getParameter("addNewAnswer"));
+        log.info("List answers: {}", quiz.getQuestions().get(QuestionID).getAnswers());
+        quiz.getQuestions().get(QuestionID).getAnswers().add(new Answer());
+        log.info("ID Questions: {}",QuestionID.intValue());
+        log.info("List answers: {}", quiz.getQuestions().get(QuestionID).getAnswers());
+        model.addAttribute("Quiz", quiz);
+        return "new";
+    }
+
+    @RequestMapping(value = "/new",params = {"saveNewQuiz"})
+    public String saveNewAnswer(final Quiz quiz){
+        quizRepository.save(quiz);
+        for (Question question : quiz.getQuestions()){
+            log.info("Question list {} {}:", question.getIdQuestion(), question.getDescription());
+            question.setQuiz(quiz);
+            questionRepository.save(question);
+            for(Answer answer: question.getAnswers()){
+                log.info("Answer list {} {}:",answer.getAnswerId(), answer.getDescription());
+                answer.setQuestion(question);
+                answerRepository.save(answer);
+            }
+        }
+        return "redirect:/quiz/all";
     }
 
     @RequestMapping(value = "/{id}/edit", params = {"addNewQuestion"})

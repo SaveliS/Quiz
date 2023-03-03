@@ -14,7 +14,7 @@ public class Answer {
     private String description;
 
     @ManyToOne()
-    @JoinColumn(name = "idquestion")
+    @JoinColumn(name = "idquestion", nullable = false)
     private Question question;
 
     public Answer() {

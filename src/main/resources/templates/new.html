@@ -8,23 +8,24 @@
   <form method="post" th:object="${Quiz}" th:action="@{/quiz/new}" action="#">
       <label for="nameQuiz" th:text="'Название викторины:'"/>
       <input type="text" id="nameQuiz" th:field="*{nameQuiz}"/>
-      <table>
-          <thead>
-          <tr>
-              <th>
-                  <button type="submit" name="addNewQuiz">Добавить вопрос</button>
-              </th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="questions, itemStat : *{questions}">
-              <td><p th:field="*{questions[__${itemStat.index}__].idQuestion}"/></td>
-              <td><input type="text" th:field="*{questions[__${itemStat.index}__].description}"/></td>
-          </tr>
-          </tbody>
-      </table>
+      <div class="main_div">
+          <div class="question_new" th:each="questions, itemStat : *{questions}">
+                <label th:text="${'Вопрос номер ' + itemStat.index + ':'}" th:field="*{questions[__${itemStat.index}__].idQuestion}"/>
+                <input type="text" th:field="*{questions[__${itemStat.index}__].description}">
+                <div class="answer_new" th:each="answer,answerStat :*{questions[__${itemStat.index}__].answers}">
+                    <label th:text="${'Ответ номер ' + answerStat.index + ':'}" th:field="*{questions[__${itemStat.index}__].answers[__${answerStat.index}__].answerId}"></label>
+                    <input type="text" th:field="*{questions[__${itemStat.index}__].answers[__${answerStat.index}__].description}">
+                </div>
+                <div class="button_add_answer">
+                    <button type="submit" name="addNewAnswer" th:value="${itemStat.index}">Добавить ответ</button>
+                </div>
+          </div>
+          <div class="button_add_questions">
+              <button type="submit" name="addNewQuiz">Добавить вопрос</button>
+          </div>
+      </div>
       <input type="hidden"  th:field="*{idQuiz}">
-      <input type="hidden" th:field="*{questions}">
+      <button type="submit" name="saveNewQuiz">Сохранить опросник</button>
   </form>
 </body>
 </html>
