@@ -73,15 +73,38 @@ public class QuizController {
         return "redirect:/quiz/all";
     }
 
-    @RequestMapping(value = "/{id}/edit", params = {"addNewQuestion"})
-    public String addNewQuestion(final Quiz editQuiz, final BindingResult bindingResult, Model model){
-        log.info("Name Quiz: {}", editQuiz.getNameQuiz());
-        log.info("ID Quiz: {}", editQuiz.getIdQuiz());
-        log.info("List question: {}", editQuiz.getQuestions());
-        editQuiz.getQuestions().add(new Question("",editQuiz));
-        log.info("List question: {}", editQuiz.getQuestions());
+    @RequestMapping(value = "/{id}/edit", params = {"addNewAnswer"})
+    public String addNewAnswerEditForm(final Quiz editQuiz, final HttpServletRequest req, Model model){
+        final Integer QuestionID = Integer.valueOf(req.getParameter("addNewAnswer"));
+        log.info("Couter answer: {}", QuestionID);
+        editQuiz.getQuestions().get(QuestionID).getAnswers().add(new Answer());
         model.addAttribute("editQuiz",editQuiz);
         return "edit";
+    }
+
+    @RequestMapping(value = "/{id}/edit", params = {"addNewQuestions"})
+    public String addNewQuestionsEditForm (final Quiz editQuiz, Model model){
+        log.info("ID Quiz: {}", editQuiz.getIdQuiz());
+        editQuiz.getQuestions().add(new Question());
+        model.addAttribute("editQuiz", editQuiz);
+        return "edit";
+    }
+
+    @RequestMapping(value = "/{id}/edit", params = {"saveEditQuestions"})
+    public String saveEditQuiz(final Quiz editQuiz){
+        for (Question question : editQuiz.getQuestions()){
+            question.setQuiz(editQuiz);
+            if(question.getIdQuestion() == 0){
+                log.info("Question ID: {}. Question des: {}. Questions to quiz: {}",question.getIdQuestion(), question.getDescription(), question.getQuiz().getIdQuiz());
+                questionRepository.save(question);
+            }
+            for (Answer answer: question.getAnswers()){
+                answer.setQuestion(question);
+                log.info("Answer description: {}. Answer id: {}. Answer to question: {}.", answer.getDescription(),answer.getAnswerId(),answer.getQuestion().getIdQuestion());
+                answerRepository.save(answer);
+            }
+        }
+        return "redirect:/quiz/all";
     }
 
     @GetMapping("/new")
