@@ -21,6 +21,7 @@
                 <label th:text="${'Ответ номер ' + answerStat.count + ':'}" for="answer_des"></label>
                 <input type="text" th:field="*{answers[__${answerStat.index}__].description}" id="answer_des">
                 <button class="button" name="deleteAnswer" th:value="${answerStat.index}">X</button>
+                <input type="checkbox" class="checkboxes" name="trueAnswer" th:field="*{answers[__${answerStat.index}__].answer}"/>
             </div>
         </div>
         <div class="save_div">

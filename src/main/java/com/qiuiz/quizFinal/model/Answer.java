@@ -12,6 +12,8 @@ public class Answer {
     private int answerId;
     @Column(name = "description")
     private String description;
+    @Column(name = "isanswer")
+    private boolean isAnswer;
 
     @ManyToOne()
     @JoinColumn(name = "idquestion", nullable = false)
@@ -20,10 +22,19 @@ public class Answer {
     public Answer() {
     }
 
-    public Answer(int answerId, String description, Question question) {
+    public Answer(int answerId, String description, Question question, boolean isAnswer) {
+        this.isAnswer = isAnswer;
         this.answerId = answerId;
         this.description = description;
         this.question = question;
+    }
+
+    public boolean isAnswer() {
+        return isAnswer;
+    }
+
+    public void setAnswer(boolean answer) {
+        isAnswer = answer;
     }
 
     public int getAnswerId() {

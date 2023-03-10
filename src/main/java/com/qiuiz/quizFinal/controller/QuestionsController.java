@@ -39,6 +39,7 @@ public class QuestionsController {
         log.info("ID Quiz {}" , editQuestion.getQuiz().getIdQuiz());
         for (Answer answer : editQuestion.getAnswers()){
             log.info("Answer: {}", answer.getAnswerId());
+            log.info("Answer isCheked: {}", answer.isAnswer());
             if(answer.getAnswerId() == 0){
                 answer.setQuestion(editQuestion);
                 log.info("Answer to add: {}",answer.getAnswerId());
