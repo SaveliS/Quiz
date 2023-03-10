@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="POST" th:object="${editQuestion}" action="#" th:action="@{/questions/{id}/edit(id=${editQuestion.getIdQuestion()})}">
+    <div class="main_container">
+        <div class="header_div">
+            <div class="questions_div">
+                <label for="des">Вопрос:</label>
+                <input type="text" th:field="*{description}" class="des_input" id="des">
+            </div>
+            <div class="new_answer_div">
+                <button name="addNewAnswer" class="button">Добавить ответ</button>
+            </div>
+        </div>
+        <div class="body_div" th:each="answers, answerStat: *{answers}">
+            <div class="answer_div">
+                <label th:text="${'Ответ номер ' + answerStat.count + ':'}" for="answer_des"></label>
+                <input type="text" th:field="*{answers[__${answerStat.index}__].description}" id="answer_des">
+                <button class="button" name="deleteAnswer" th:value="${answerStat.index}">X</button>
+            </div>
+        </div>
+        <div class="save_div">
+            <button type="submit" class="button" name="saveQuestion">Сохранить</button>
+        </div>
+    </div>
+    <input type="hidden" th:field="*{idQuestion}">
+    <input type="hidden" th:field="*{quiz.idQuiz}">
+    <input type="hidden" th:field="*{answers}">
+</form>
+</body>
+</html>

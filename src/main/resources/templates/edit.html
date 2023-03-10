@@ -16,7 +16,8 @@
             <tr>
                 <td>
                     <label>Вопрос:</label>
-                    <input type="text" th:field="*{questions[__${statQuestions.index}__].description}">
+                    <input type="text" th:field="*{questions[__${statQuestions.index}__].description}" th:href="@{/questions/{id}/edit(id=${questions.getIdQuestion()})}">
+                    <a th:href="@{/questions/{id}/edit(id=${questions.getIdQuestion()})}">Редактировать</a>
                 </td>
             </tr>
             <tr th:each="answer, answerStat :*{questions[__${statQuestions.index}__].answers}">
