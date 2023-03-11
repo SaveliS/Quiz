@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Выберите викторину, чтобы начать игру</h1>
+    <form class="main_form" th:each="oneQuiz, statQuiz : ${allQuiz}">
+        <div class="name_quiz">
+            <a th:text="*{oneQuiz.nameQuiz}" th:href="@{/game/{id}(id=${oneQuiz.getIdQuiz()})}"></a>
+        </div>
+    </form>
+</body>
+</html>

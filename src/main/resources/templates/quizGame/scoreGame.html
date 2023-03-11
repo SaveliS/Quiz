@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <label>Поздравляем вы закончили викторину!</label><br>
+  <label th:text="${'Вы набрали '+points + ' баллов'}"></label><br>
+  <a th:href="@{/game}">Закончить игру</a>
+</body>
+</html>

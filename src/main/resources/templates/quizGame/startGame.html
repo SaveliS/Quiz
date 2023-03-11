@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${quizGame.getNameQuiz()}"></title>
+</head>
+<body>
+    <form th:object="${quizGame}" method="post" th:action="@{/game/{id}/start(id=${quizGame.getIdQuiz()})}">
+        <div th:each="question, statQuestion : *{questions}">
+            <div class="questions_game">
+                <label for="des" th:text="${'Вопрос номер ' + statQuestion.count + ':'}"></label>
+                <input id="des" type="text" th:field="*{questions[__${statQuestion.index}__].description}">
+                <div th:each="answer, statAnswer : *{questions[__${statQuestion.index}__].answers}">
+                    <label for="ans" th:text="*{questions[__${statQuestion.index}__].answers[__${statAnswer.index}__].description}"></label>
+                    <input type="checkbox" id="ans" th:value="${answer.getAnswerId()}" th:field="${answerUser.checkedItems}">
+                </div>
+            </div>
+        </div>
+        <button type="submit" name="checkResult">Результаты</button>
+        <input type="hidden" th:field="*{idQuiz}">
+        <input type="hidden" th:field="*{questions}">
+    </form>
+</body>
+</html>

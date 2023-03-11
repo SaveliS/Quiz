@@ -28,6 +28,7 @@
             <button type="submit" class="button" name="saveQuestion">Сохранить</button>
         </div>
     </div>
+    <a th:href="@{/quiz/{id}/edit(id=${editQuestion.quiz.getIdQuiz()})}">Назад</a>
     <input type="hidden" th:field="*{idQuestion}">
     <input type="hidden" th:field="*{quiz.idQuiz}">
     <input type="hidden" th:field="*{answers}">

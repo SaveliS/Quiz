@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="main_container">
+        <div class="name_quiz">
+            <label th:text="${goQuiz.getNameQuiz()}"></label>
+        </div>
+        <div class="description_quiz">
+            <label>Описание для викторины</label>
+        </div>
+        <div class="start_quiz_game">
+            <a th:href="@{/game/{id}/start(id=${goQuiz.getIdQuiz()})}">Начать игру</a>
+        </div>
+    </div>
+</body>
+</html>

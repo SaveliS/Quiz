@@ -46,7 +46,8 @@ public class QuestionsController {
                 answerRepository.save(answer);
             }
         }
-        return "redirect:/quiz/all";
+        model.addAttribute("editQuestion", editQuestion);
+        return "editQuestions";
     }
 
     @RequestMapping(value = "/{id}/edit", params = {"deleteAnswer"})
