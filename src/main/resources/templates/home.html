@@ -8,6 +8,10 @@
     <a th:href="@{/game}">Пройти викторины</a><br>
     <a th:href="@{/quiz/new}">Создать собственную викторину</a><br>
     <a th:href="@{/quiz/all}">Редактировать собственную викторину</a><br>
-    <a>Регистрация</a>
+    <a th:href="@{/register}">Регистрация</a>
+    <a th:href="@{/login}">Авторизация</a>
+    <form method="POST" th:action="@{/logout}">
+        <input type="submit" value="Logout"/>
+    </form>
 </body>
 </html>
