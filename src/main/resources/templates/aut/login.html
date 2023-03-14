@@ -1,28 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/loginStyle.css" type="text/css">
 </head>
 <body>
-    <h1>Авторизация</h1>
-    <div th:if="${error}">
-        Unable to login. Check your username and password.
-    </div>
-
-    <p>Новеньки? Кликни
-        <a th:href="@{/register}">здесь</a> для регистрации.</p>
-
-    <!-- tag::thAction[] -->
-    <form method="POST" th:action="@{/login}" id="loginForm">
-        <!-- end::thAction[] -->
-        <label for="username">Username: </label>
-        <input type="text" name="username" id="username" /><br/>
-
-        <label for="password">Password: </label>
-        <input type="password" name="password" id="password" /><br/>
-
-        <input type="submit" value="Login"/>
+<div class="center">
+    <h1>Login</h1>
+    <form method="post" th:action="@{/login}" id="loginForm">
+        <div class="txt_field">
+            <input type="text" required name="username">
+            <span></span>
+            <label>Username</label>
+        </div>
+        <div class="txt_field">
+            <input type="password" required name="password">
+            <span></span>
+            <label>Password</label>
+        </div>
+        <div class="pass">Forgot Password?</div>
+        <input type="submit" value="Login">
+        <div class="signup_link">
+            Not a member? <a href="#">Signup</a>
+        </div>
     </form>
+</div>
 </body>
 </html>
