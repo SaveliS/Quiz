@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 @Slf4j
@@ -26,12 +25,16 @@ public class RegistrationController {
     @GetMapping()
     public String registerForm(Model model){
         model.addAttribute("reg", new User());
+        log.info("Отдал страницу");
         return "aut/registration";
     }
 
     @PostMapping()
     public String processRegistration(RegistrationForm form){
         log.info("Encoder: {}", encoder);
+        log.info("Форма регистрации: {}", form.getEmail());
+        log.info("Форма регистрации: {}", form.getUsername());
+        log.info("Форма регистрации: {}", form.getPassword());
         userRepo.save(form.toUser(encoder));
         return "redirect:/login";
     }

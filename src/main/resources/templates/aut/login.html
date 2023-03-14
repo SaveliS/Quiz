@@ -12,17 +12,17 @@
         <div class="txt_field">
             <input type="text" required name="username">
             <span></span>
-            <label>Username</label>
+            <label>Логин</label>
         </div>
         <div class="txt_field">
             <input type="password" required name="password">
             <span></span>
-            <label>Password</label>
+            <label>Пароль</label>
         </div>
         <div class="pass">Forgot Password?</div>
         <input type="submit" value="Login">
         <div class="signup_link">
-            Not a member? <a href="#">Signup</a>
+            Новенький? <a th:href="@{/register}">Присоединяйся</a>
         </div>
     </form>
 </div>
