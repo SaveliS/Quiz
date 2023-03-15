@@ -8,8 +8,12 @@ import java.util.List;
 @Data
 public class AnswerUser {
     private List<Integer> checkedItems = new ArrayList<>();
+    private int couter = 1;
+    private int point = 0;
 
-    public AnswerUser(List<Integer> checkedItems) {
+    public AnswerUser(List<Integer> checkedItems, int couter, int point) {
+        this.point = point;
+        this.couter = couter;
         this.checkedItems = checkedItems;
     }
 
@@ -22,5 +26,21 @@ public class AnswerUser {
 
     public void setCheckedItems(List<Integer> checkedItems) {
         this.checkedItems = checkedItems;
+    }
+
+    public int getCouter() {
+        return couter;
+    }
+
+    public void setCouter(int couter) {
+        this.couter = couter;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 }

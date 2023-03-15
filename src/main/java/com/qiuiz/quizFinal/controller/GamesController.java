@@ -8,12 +8,10 @@ import com.qiuiz.quizFinal.repository.AnswerRepository;
 import com.qiuiz.quizFinal.repository.QuizRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @Controller
@@ -22,22 +20,38 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class GamesController {
     @Autowired
     private QuizRepository quizRepository;
-
     @Autowired
     private AnswerRepository answerRepository;
 
-    @RequestMapping(value = "/{id}/start", params = {"checkResult"})
-    public String checkResult(final Quiz quiz,final AnswerUser answerUser,Model model){
-        int points = 0;
-        log.info("Quiz ID: {}", quiz.getIdQuiz());
-        log.info("Answer user: {}", answerUser.getCheckedItems());
-        for (int i = 0; i < answerUser.getCheckedItems().size(); i++) {
-            Answer answer = answerRepository.findById(answerUser.getCheckedItems().get(i)).get();
-            if(answer.isAnswer() == true){
-                points++;
+    @RequestMapping(value = "/{id}/start", params = {"nextQuestion"})
+    public String nextQuestions(final Question question, final AnswerUser answerUser, Model model){
+        log.info("ID Questions: {}", question.getIdQuestion());
+        log.info("Answer user: {}", answerUser);
+        log.info("Answer to questions: {}", question.getAnswers());
+        log.info("ID quiz: {}", question.getQuiz());
+        log.info("List questions: {}", quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions());
+        if(quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions().size() == answerUser.getCouter()){
+            model.addAttribute("points", answerUser.getPoint());
+            return "quizGame/scoreGame";
+        }
+        model.addAttribute("questionsList", quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions().get(answerUser.getCouter()));
+        for (int id : answerUser.getCheckedItems()){
+            if(answerRepository.findById(id).get().isAnswer() == true){
+                int points = answerUser.getPoint();
+                points++;answerUser.setPoint(points);
+                log.info("Points: {}", points);
             }
         }
-        log.info("Points: {}", points);
+        int couter = answerUser.getCouter();
+        couter++;
+        answerUser.setCouter(couter);
+        log.info("Update couter: {}", couter);
+        model.addAttribute("answerUser", answerUser);
+        return "quizGame/startGame";
+    }
+
+    @GetMapping("/scoreGame")
+    public String scoresGame(int points, Model model){
         model.addAttribute("points", points);
         return "quizGame/scoreGame";
     }
@@ -57,7 +71,7 @@ public class GamesController {
     @GetMapping("/{id}/start")
     public String startQuiz(@PathVariable int id, Model model, AnswerUser answerUser){
         model.addAttribute("answerUser", answerUser);
-        model.addAttribute("quizGame", quizRepository.findById(id).get());
+        model.addAttribute("questionsList", quizRepository.findById(id).get().getQuestions().get(0));
         return "quizGame/startGame";
     }
 }

@@ -2,23 +2,43 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${quizGame.getNameQuiz()}"></title>
+    <title th:text="${questionsList.getQuiz().getNameQuiz()}"></title>
+    <link rel="stylesheet" href="/css/startGame.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" type="text/css"/>
 </head>
 <body>
-    <form th:object="${quizGame}" method="post" th:action="@{/game/{id}/start(id=${quizGame.getIdQuiz()})}">
-        <div th:each="question, statQuestion : *{questions}">
-            <div class="questions_game">
-                <label for="des" th:text="${'Вопрос номер ' + statQuestion.count + ':'}"></label>
-                <input id="des" type="text" th:field="*{questions[__${statQuestion.index}__].description}">
-                <div th:each="answer, statAnswer : *{questions[__${statQuestion.index}__].answers}">
-                    <label for="ans" th:text="*{questions[__${statQuestion.index}__].answers[__${statAnswer.index}__].description}"></label>
-                    <input type="checkbox" id="ans" th:value="${answer.getAnswerId()}" th:field="${answerUser.checkedItems}">
+<form method="post" th:action="@{/game/{id}/start(id=${questionsList.getQuiz().getIdQuiz()})}" th:object="${questionsList}" class="main_form">
+    <div class="quiz_box">
+        <header>
+            <div class="title" th:text="${questionsList.getQuiz().getNameQuiz()}"></div>
+            <div class="timer">
+                <div class="time_left_txt">Время: </div>
+                <div class="timer_sec">15</div>
+            </div>
+            <div class="time_line"></div>
+        </header>
+        <section>
+            <div class="que_text">
+                <span th:text="*{description}">What does HTML stand for?</span>
+            </div>
+            <div class="option_list" th:each="answer,statAnswer:*{answers}">
+                <div class="option">
+                    <input type="checkbox" th:text="*{answers[__${statAnswer.index}__].description}" th:value="${answer.getAnswerId()}" th:field="${answerUser.checkedItems}"/>
                 </div>
             </div>
-        </div>
-        <button type="submit" name="checkResult">Результаты</button>
-        <input type="hidden" th:field="*{idQuiz}">
-        <input type="hidden" th:field="*{questions}">
-    </form>
+        </section>
+        <!-- footer of Quiz Box -->
+        <footer>
+            <div class="total_que">
+                <span><p th:text="${answerUser.couter}">1</p>из<p th:text="${questionsList.getAnswers().size()}">5</p></span>
+            </div>
+            <button type="submit" class="next_btn" name="nextQuestion">Следующий вопрос</button>
+        </footer>
+    </div>
+    <input type="hidden" th:field="*{quiz.idQuiz}">
+    <input type="hidden" th:field="${answerUser.couter}">
+    <input type="hidden" th:field="${answerUser.point}">
+</form>
+</div>
 </body>
 </html>
