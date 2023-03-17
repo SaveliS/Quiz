@@ -116,7 +116,10 @@ section .option_list .option.incorrect{
     background: #f8d7da;
     border: 1px solid #f5c6cb;
 }
-section .option_list .option.disabled{
+section.disabled{
+    pointer-events: none;
+}
+section .option_list.disabled{
     pointer-events: none;
 }
 section .option_list .option .icon{
