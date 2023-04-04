@@ -2,14 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!--=============== CSS ===============-->
+    <link rel="stylesheet" href="/css/allQuizStyle.css">
 </head>
 <body>
-<h1>Выберите викторину, чтобы начать игру</h1>
-    <form class="main_form" th:each="oneQuiz, statQuiz : ${allQuiz}">
-        <div class="name_quiz">
-            <a th:text="*{oneQuiz.nameQuiz}" th:href="@{/game/{id}(id=${oneQuiz.getIdQuiz()})}"></a>
-        </div>
-    </form>
+<section class="popular section" id="popular">
+    <span class="section__subtitle">The Best Quiz</span>
+    <h2 class="section__title">Popular Quiz</h2>
+
+    <div class="popular__container container grid">
+        <article class="popular__card" th:each="oneQuiz, statQuiz :${allQuiz}">
+            <img src="/images/imageMain.png" alt="popular image" class="popular__img">
+
+            <h3 class="popular__name" th:text="${oneQuiz.getNameQuiz()}">Викторина</h3>
+            <span class="popular__description">Описание</span>
+
+            <button class="popular__button">
+                <a th:href="@{/game/{id}/start(id=${oneQuiz.idQuiz})}">Играть</a>
+            </button>
+        </article>
+    </div>
+</section>
 </body>
 </html>
