@@ -39,8 +39,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/game/**", "/register/**","/", "/css/**", "/logout_user","/js/**","/images/**").permitAll()
-                        .requestMatchers("/quiz/**","/questions/**").hasRole("USER")
+                        .requestMatchers("/game/**", "/register/**","/", "/css/**",
+                                "/logout_user","/js/**","/images/**").permitAll()
+                        .requestMatchers("/quiz/**","/questions/**","/profile/**").hasRole("USER")
                         .anyRequest().denyAll())
                 .formLogin((form) -> form
                         .loginPage("/login")

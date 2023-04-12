@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "email")
     private String email;
+    @Column(name = "photo")
+    private byte [] photo;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -34,10 +37,12 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, Roles roles, byte [] photo) {
         this.username = username;
         this.password = password;
         this.email = email;
+        this.rolesList.add(roles);
+        this.photo = photo;
     }
 
     public int getIduser() {
@@ -74,6 +79,23 @@ public class User implements UserDetails {
 
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
+    public String getPhotoBase64() {
+        if(photo == null)
+        {
+            return  null;
+        }
+
+        return Base64.getEncoder().encodeToString(getPhoto());
     }
 
     @Override

@@ -10,14 +10,14 @@
         <div class="logo">
             <a>QuizSpace.</a>
         </div>
-        <div class="action">
+        <div class="action" th:if="${loginUser != 'anonymousUser'}">
             <div class="profile" onclick="menuToggle();">
                 <img src="/images/user.png">
             </div>
             <div class="menu">
                 <h3>Личный кабинет<br>пользователя</h3>
                 <ul>
-                    <li><img src="/images/user.png"><a href="#">Профиль</a></li>
+                    <li><img src="/images/user.png"><a th:href="@{/profile/{id}(id=${idUser.getIduser()})}">Профиль</a></li>
                     <li><img src="/images/editUser.png"><a href="#">Изменить профиль</a></li>
                     <li><img src="/images/settingUser.png"><a href="#">Настройки</a></li>
                     <li><img src="/images/leaveUser.png"><a href="/logout_user">Выйти</a></li>

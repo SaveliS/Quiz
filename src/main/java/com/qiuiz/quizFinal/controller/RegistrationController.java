@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.io.IOException;
+
 @Slf4j
 @Controller
 @RequestMapping("/register")
@@ -30,7 +33,7 @@ public class RegistrationController {
     }
 
     @PostMapping()
-    public String processRegistration(RegistrationForm form){
+    public String processRegistration(RegistrationForm form) {
         log.info("Encoder: {}", encoder);
         log.info("Форма регистрации: {}", form.getEmail());
         log.info("Форма регистрации: {}", form.getUsername());

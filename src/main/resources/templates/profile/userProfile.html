@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Account Settings UI Design</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="/css/userProfileStyle.css">
+</head>
+<body>
+<form class="py-5 my-5" method="post" th:object="${currentUser}">
+  <div class="container">
+    <h1 class="mb-5">Профиль пользователя</h1>
+    <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+      <div class="profile-tab-nav border-right">
+        <div class="p-4">
+          <div class="img-circle text-center mb-3">
+            <a th:href="@{/profile/{id}/image(id=${currentUser.getIduser()})}">
+              <img src="/images/user.png" th:if="${currentUser.photo == null}" alt="Image" class="shadow"/>
+              <img th:if="${currentUser.getPhotoBase64() != null}" th:src="'data:image/jpeg;base64,' +${currentUser.getPhotoBase64()}">
+            </a>
+          </div>
+          <h4 class="text-center" th:text="*{username}">No name</h4>
+        </div>
+        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+          <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
+            <i class="fa fa-home text-center mr-1"></i>
+            Профиль
+          </a>
+          <a class="nav-link" id="password-tab" data-toggle="pill" href="#password" role="tab" aria-controls="password" aria-selected="false">
+            <i class="fa fa-key text-center mr-1"></i>
+            Пароль
+          </a>
+          <a class="nav-link" id="application-tab" data-toggle="pill" href="#application" role="tab" aria-controls="application" aria-selected="false">
+            <i class="fa fa-tv text-center mr-1"></i>
+            История игр
+          </a>
+        </div>
+      </div>
+      <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+          <h3 class="mb-4">Настройки аккаунта</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Логин:</label>
+                <input type="text" class="form-control" th:value="*{username}">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Электронная почта:</label>
+                <input type="text" class="form-control" th:value="*{email}">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>О себе</label>
+                <textarea class="form-control" rows="4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore vero enim error similique quia numquam ullam corporis officia odio repellendus aperiam consequatur laudantium porro voluptatibus, itaque laboriosam veritatis voluptatum distinctio!</textarea>
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-primary">Обновить</button>
+            <button class="btn btn-light">Отменить</button>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
+          <h3 class="mb-4">Настройки пароля</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Старый пароль</label>
+                <input type="password" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Новый пароль</label>
+                <input type="password" class="form-control">
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Подтвердите новый пароль</label>
+                <input type="password" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-primary">Обновить</button>
+            <button class="btn btn-light">Отменить</button>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="application" role="tabpanel" aria-labelledby="application-tab">
+          <h3 class="mb-4">История игр</h3>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <table class="table">
+                  <tr>
+                    <td>Номер</td>
+                    <td>Название викторины</td>
+                    <td>Количество очков</td>
+                    <td>Дата прохождения</td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>Тестовая</td>
+                    <td>10</td>
+                    <td>23.03.2003</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>
