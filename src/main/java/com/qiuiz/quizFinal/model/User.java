@@ -27,6 +27,8 @@ public class User implements UserDetails {
     private String email;
     @Column(name = "photo")
     private byte [] photo;
+    @Column(name = "user_about")
+    private String user_about;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -37,12 +39,13 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, String password, String email, Roles roles, byte [] photo) {
+    public User(String username, String password, String email, Roles roles, byte [] photo, String user_about) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.rolesList.add(roles);
         this.photo = photo;
+        this.user_about = user_about;
     }
 
     public int getIduser() {
@@ -79,6 +82,17 @@ public class User implements UserDetails {
 
     public void setRolesList(List<Roles> rolesList) {
         this.rolesList = rolesList;
+    }
+
+    public String getUser_about() {
+        if(user_about == null){
+            return null;
+        }
+        return user_about;
+    }
+
+    public void setUser_about(String user_about) {
+        this.user_about = user_about;
     }
 
     public byte[] getPhoto() {

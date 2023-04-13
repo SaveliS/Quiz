@@ -24,6 +24,6 @@ public class RegistrationForm {
         log.info("password: {}",password);
         log.info("Password encoder: {}", passwordEncoder.encode(password));
         log.info("email");
-        return new User(username,password,email,new Roles("ROLE_USER"),null);
+        return new User(username,password,email,new Roles("ROLE_USER"),null, null);
     }
 }
