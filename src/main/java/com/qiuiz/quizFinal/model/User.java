@@ -36,6 +36,9 @@ public class User implements UserDetails {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Roles> rolesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "current_user", fetch = FetchType.EAGER)
+    private List<HistoryGames> historyGames = new ArrayList<>();
+
     public User() {
     }
 

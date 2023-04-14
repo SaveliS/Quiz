@@ -57,13 +57,13 @@
             <div class="col-md-12">
               <div class="form-group">
                 <label>О себе</label>
-                <textarea th:if="${currentUser.getUser_about() == null}" class="form-control" rows="4">Напишите о себе</textarea>
-                <textarea th:if="${currentUser.getUser_about() != null}" th:text="*{user_about}" class="form-control" rows="4">Напишите о себе</textarea>
+                <textarea name="newAboutUser" th:if="${currentUser.getUser_about() == null}" class="form-control" rows="4"></textarea>
+                <textarea th:if="${currentUser.getUser_about() != null}" th:field="*{user_about}" th:text="*{user_about}" class="form-control" rows="4"></textarea>
               </div>
             </div>
           </div>
           <div>
-            <button class="btn btn-primary">Обновить</button>
+            <button name="UpdateAboutUser" class="btn btn-primary">Обновить</button>
             <button class="btn btn-light">Отменить</button>
           </div>
         </div>
@@ -108,11 +108,11 @@
                     <td>Количество очков</td>
                     <td>Дата прохождения</td>
                   </tr>
-                  <tr>
-                    <td>1</td>
-                    <td>Тестовая</td>
-                    <td>10</td>
-                    <td>23.03.2003</td>
+                  <tr th:each="oneRecord, statRecod : *{historyGames}">
+                    <td th:text="${statRecod.index}">1</td>
+                    <td th:text="${oneRecord.getQuiz_history().getNameQuiz()}">Тестовая</td>
+                    <td th:text="${oneRecord.getPoints()}">10</td>
+                    <td th:text="${oneRecord.getDate_quiz()}">23.03.2003</td>
                   </tr>
                 </table>
               </div>

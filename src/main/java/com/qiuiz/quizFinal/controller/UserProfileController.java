@@ -31,6 +31,22 @@ public class UserProfileController {
         this.encoder = encoder;
     }
 
+    @RequestMapping(value = "/{id}", params = {"UpdateAboutUser"})
+    public String updateAboutUser(@RequestParam(required = false) String newAboutUser,final User user,
+                                  @AuthenticationPrincipal User autUser, Model model){
+        User userInDB = userRepository.findByUsername(autUser.getUsername());
+        if(autUser.getUser_about() != null){
+            userInDB.setUser_about(user.getUser_about());
+        }
+        if(newAboutUser != null){
+            userInDB.setUser_about(newAboutUser);
+        }
+        userRepository.save(userInDB);
+        log.info("User about: {}", userInDB.getUser_about());
+        model.addAttribute("currentUser", userInDB);
+        return "profile/userProfile";
+    }
+
     @RequestMapping(value = "/{id}", params = {"UpdatePassword"})
     public String updatePassword(@RequestParam String oldPassword,@RequestParam String confirmPassword ,final User user,
                                  @AuthenticationPrincipal User autUser, Model model){
