@@ -1,6 +1,8 @@
 package com.qiuiz.quizFinal.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -11,6 +13,8 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int answerId;
     @Column(name = "description")
+    @NotBlank(message = "Заполните поле.")
+    @Size(min = 3, message = "Название должно содержать минимум 3 символа.")
     private String description;
     @Column(name = "isanswer")
     private boolean isAnswer;

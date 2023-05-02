@@ -12,6 +12,7 @@
           <div class="question_new" th:each="questions, itemStat : *{questions}">
                 <label th:text="${'Вопрос номер ' + itemStat.index + ':'}" th:field="*{questions[__${itemStat.index}__].idQuestion}"/>
                 <input type="text" th:field="*{questions[__${itemStat.index}__].description}">
+                <input type="file" name="image_questions" th:field="*{questions[__${itemStat.index}__].image_questions}">
                 <div class="answer_new" th:each="answer,answerStat :*{questions[__${itemStat.index}__].answers}">
                     <label th:text="${'Ответ номер ' + answerStat.index + ':'}" th:field="*{questions[__${itemStat.index}__].answers[__${answerStat.index}__].answerId}"></label>
                     <input type="text" th:field="*{questions[__${itemStat.index}__].answers[__${answerStat.index}__].description}">

@@ -1,12 +1,13 @@
 package com.qiuiz.quizFinal.model;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "quiz")
@@ -16,6 +17,8 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idQuiz;
     @Column(name = "namequiz")
+    @NotBlank(message = "Заполните поле.")
+    @Size(min = 3, message = "Название должно содержать минимум 3 символа.")
     private String nameQuiz;
 
     @OneToMany(mappedBy = "quiz")

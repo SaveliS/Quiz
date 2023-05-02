@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание вопросов</title>
+    <link rel="stylesheet" href="/css/newQuestionsStyle.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+<form th:method="post" th:action="@{/quiz/new}" th:object="${newQuiz}" class="main_form">
+  <input type="hidden" th:field="*{questions}">
+  <div class="quiz_box">
+    <header>
+      <input type="text" class="title" th:field="*{nameQuiz}"/>
+      <div class="title_info" th:text="${'Вопрос № ' + newQuiz.questions.size()}">Вопрос № 1</div>
+    </header>
+    <section>
+      <div class="que_text">
+        <input th:field="*{questions[__${newQuiz.questions.size() - 1}__].description}" class="new_question" placeholder="Введите вопрос..." type="text">
+        <button th:if="*{questions[__${newQuiz.questions.size() - 1}__].image_questions == null}" class="load_photo" name="loadImageQuestion" th:value="*{questions.size() - 1}">Загрузить фото</button>
+        <input type="image" th:if="*{questions[__${newQuiz.questions.size() - 1}__].image_questions != null}" th:src="'data:image/jpeg;base64,'+ *{questions[__${newQuiz.questions.size() - 1}__].getPhotoBase64()}" class="question_image">
+      </div>
+      <div class="option_list">
+        <div class="option" th:each="answer,answerStat : *{questions[__${newQuiz.questions.size() - 1}__].answers}">
+          <input th:field="*{questions[__${newQuiz.questions.size() - 1}__].answers[__${answerStat.index}__].description}" placeholder="Введите ответ..." class="new_answer" type="text">
+          <input th:field="*{questions[__${newQuiz.questions.size() - 1}__].answers[__${answerStat.index}__].answer}" class="checkbox_new_answer" type="checkbox"/>
+        </div>
+        <div class="add_new_answer" th:if="*{questions[__${newQuiz.questions.size() - 1}__].answers.size() < 6}">
+          <button name="addNewAnswer" class="next_btn">Добавить ответ</button>
+        </div>
+      </div>
+    </section>
+    <!-- footer of Quiz Box -->
+    <footer>
+      <button name="addNewQuestion" class="next_btn">Добавить вопрос</button>
+      <button name="checkNewQuiz" class="next_btn">Сохранить</button>
+    </footer>
+  </div>
+  <div th:if="${not #lists.isEmpty(newQuiz.questions)}" th:each="quiz, statQuiz: *{questions}">
+    <input type="hidden" th:field="*{questions[__${statQuiz.index}__].idQuestion}">
+    <input type="hidden" th:field="*{questions[__${statQuiz.index}__].image_questions}">
+  </div>
+  <input type="hidden" th:field="*{idQuiz}">
+</form>
+</body>
+</html>

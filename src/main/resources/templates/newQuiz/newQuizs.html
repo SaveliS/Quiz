@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/quizNewStyle.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <title>Викторина</title>
+</head>
+<body>
+<form method="post" th:action="@{/quiz/new}" th:object="${Quiz}" class="main_form">
+    <div class="quiz_box">
+        <header>
+            <div class="title">Добро пожаловать!</div>
+            <div class="title_info">Вы попали на страницу создания викторины.<br>Введите название викторины.</div>
+        </header>
+        <section>
+            <div class="que_text">
+                <input th:field="*{nameQuiz}" class="new_question" placeholder="Введите название викторины..." type="text">
+                <p class="error" th:each="error : ${errors}"
+                   th:text="${error.getDefaultMessage()}"></p>
+            </div>
+        </section>
+        <!-- footer of Quiz Box -->
+        <footer>
+            <button name="saveNewQuiz" class="next_btn">Сохранить</button>
+            <button name="cancelCreateQuiz" class="next_btn">Отмена</button>
+        </footer>
+    </div>
+</form>
+</body>
+</html>

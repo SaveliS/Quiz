@@ -105,14 +105,14 @@
                   <tr>
                     <td>Номер</td>
                     <td>Название викторины</td>
-                    <td>Количество очков</td>
+                    <td>Количество баллов</td>
                     <td>Дата прохождения</td>
                   </tr>
                   <tr th:each="oneRecord, statRecod : *{historyGames}">
-                    <td th:text="${statRecod.index}">1</td>
+                    <td th:text="${statRecod.count}">1</td>
                     <td th:text="${oneRecord.getQuiz_history().getNameQuiz()}">Тестовая</td>
                     <td th:text="${oneRecord.getPoints()}">10</td>
-                    <td th:text="${oneRecord.getDate_quiz()}">23.03.2003</td>
+                    <td th:text="${#dates.format(oneRecord.getDate_quiz(),'dd-MM-yyyy')}"></td>
                   </tr>
                 </table>
               </div>

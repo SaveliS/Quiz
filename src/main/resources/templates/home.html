@@ -12,7 +12,8 @@
         </div>
         <div class="action" th:if="${loginUser != 'anonymousUser'}">
             <div class="profile" onclick="menuToggle();">
-                <img src="/images/user.png">
+                <img th:if="${idUser.getPhotoBase64() == null}" src="/images/user.png">
+                <img th:if="${idUser.getPhotoBase64() != null}" th:src="'data:image/jpeg;base64,' + ${idUser.getPhotoBase64()}">
             </div>
             <div class="menu">
                 <h3>Личный кабинет<br>пользователя</h3>

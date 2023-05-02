@@ -1,5 +1,6 @@
 package com.qiuiz.quizFinal.controller;
 
+import com.qiuiz.quizFinal.model.HistoryGames;
 import com.qiuiz.quizFinal.model.User;
 import com.qiuiz.quizFinal.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -66,26 +67,49 @@ public class UserProfileController {
         return "profile/userProfile";
     }
 
+
+    /**
+     * @param name Имя загруженного документа.
+     * @param photo Документ выбранный для загрузки.
+     * @param user Авторизированный пользователь.
+     * @param model Модель для загрузки данных о пользователе на форму.
+     * @return Страница пользователя с обновленными данными.
+     * @throws IOException Если преобразование невозможно.
+     */
     @PostMapping("/{id}")
     public String updateImageUser(@RequestParam String name, @RequestParam MultipartFile photo,
                                   @AuthenticationPrincipal User user,Model model) throws IOException {
         User userInDB = userRepository.findByUsername(user.getUsername());
         userInDB.setPhoto(photo.getBytes());
         userRepository.save(userInDB);
-        model.addAttribute("currentUser",user);
+        model.addAttribute("currentUser",userInDB);
+
         return "profile/userProfile";
     }
 
-
+    /**
+     * @param user Авторизированный пользователь.
+     * @param model Модель для загрузки данных о пользователе на форму.
+     * @return Страница пользователя с текущим номером (id).
+     */
     @GetMapping("/{id}")
     public String getProfileUser(@AuthenticationPrincipal User user, Model model){
         model.addAttribute("currentUser", user);
+        for(HistoryGames historyGames : user.getHistoryGames()){
+            log.info("History date: {}", historyGames.getDate_quiz().toInstant());
+        }
         return "profile/userProfile";
     }
 
+    /**
+     * @param user Авторизированный пользователь.
+     * @param model Модель для загрузки данных о пользователе на форму.
+     * @return Страница для обновления фото.
+     */
     @GetMapping("/{id}/image")
     public String updateProfileUser(@AuthenticationPrincipal User user,Model model){
         model.addAttribute("currentUser",user);
+
         return "profile/updateImage";
     }
 }

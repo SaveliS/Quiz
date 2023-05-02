@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Тестовый</title>
+    <link rel="stylesheet" href="/css/quizFinalStyle.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+<form th:method="post" th:action="@{/quiz/new}" th:object="${finalQuiz}"  class="main_form">
+  <div class="quiz_box">
+    <header>
+      <div class="title" th:text="*{'Викторина: ' + nameQuiz}">Викторина: "Какое-то название"</div>
+    </header>
+    <section th:each="question,statQuestion : *{questions}">
+      <div class="que_text">
+        <label class="new_question" th:field="*{questions[__${statQuestion.index}__].description}" th:text="*{questions[__${statQuestion.index}__].description}"></label>
+        <input type="image" th:if="*{questions[__${statQuestion.index}__].image_questions != null}" th:src="'data:image/jpeg;base64,'+ *{questions[__${statQuestion.index}__].getPhotoBase64()}" class="question_image">
+      </div>
+      <div class="option_list">
+        <div class="option" th:each="answer,statAnswer : ${question.answers}">
+          <label th:text="*{questions[__${statQuestion.index}__].answers[__${statAnswer.index}__].description}" class="new_answer"/>
+          <input th:field="*{questions[__${statQuestion.index}__].answers[__${statAnswer.index}__].answer}" class="checkbox_new_answer" type="checkbox"/>
+        </div>
+      </div>
+    </section>
+    <!-- footer of Quiz Box -->
+    <footer>
+      <button name="SaveNewQuiz" class="next_btn">Сохранить</button>
+      <button class="next_btn">Сбросить</button>
+    </footer>
+  </div>
+  <input type="hidden" th:field="*{nameQuiz}">
+</form>
+</body>
+</html>
