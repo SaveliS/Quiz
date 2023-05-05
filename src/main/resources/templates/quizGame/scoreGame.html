@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Результат викторины</title>
+    <link rel="stylesheet" type="text/css" href="/css/scoreStyle.css">
 </head>
 <body>
-  <label>Поздравляем вы закончили викторину!</label><br>
-  <label th:text="${'Вы набрали '+points + ' баллов'}"></label><br>
-  <a th:href="@{/game}">Закончить игру</a>
+<form th:method="post" th:action="@{/game/scoreGame}" class="quiz-container">
+    <h1>Результаты викторины</h1>
+    <p th:if="${points == 0 || points > 5}">Вы набрали: <span class="score-value" th:text="${points.toString()}">5</span> баллов.</p>
+    <p th:if="${points > 1 && points < 5}">Вы набрали: <span class="score-value" th:text="${points.toString()}">2</span> балла.</p>
+    <p th:if="${points == 1}">Вы набрали: <span class="score-value" th:text="${points.toString()}">1</span> балл.</p>
+    <button name="saveScoreUser" class="btn-finish" th:value="*{points}">Завершить</button>
+</form>
 </body>
 </html>

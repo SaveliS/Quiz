@@ -1,5 +1,8 @@
 package com.qiuiz.quizFinal.model.support;
 
+import com.qiuiz.quizFinal.model.Answer;
+import com.qiuiz.quizFinal.model.Question;
+import com.qiuiz.quizFinal.model.Quiz;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -43,4 +46,5 @@ public class AnswerUser {
     public void setPoint(int point) {
         this.point = point;
     }
+
 }

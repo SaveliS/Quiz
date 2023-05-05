@@ -20,6 +20,7 @@
         <section>
             <div class="que_text">
                 <span th:text="*{description}">What does HTML stand for?</span>
+                <input type="image" th:if="*{image_questions != null}" th:src="'data:image/jpeg;base64,'+ *{getPhotoBase64()}" class="question_image" >
             </div>
             <div class="option_list" th:each="answer,statAnswer:*{answers}">
                 <div class="option">
