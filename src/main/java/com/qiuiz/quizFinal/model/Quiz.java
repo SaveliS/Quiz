@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,12 @@ public class Quiz {
     private String nameQuiz;
 
     @OneToMany(mappedBy = "quiz")
+    @Fetch(FetchMode.JOIN)
     private List<Question> questions = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name="id_user")
+    private User user;
     @OneToMany(mappedBy = "quiz_history")
     private List<HistoryGames> historyGames = new ArrayList<>();
 
@@ -32,6 +38,14 @@ public class Quiz {
     }
 
     public Quiz() {
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Question> getQuestions() {

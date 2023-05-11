@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/loadImage/loadImageEditQuestion.css">
+  <title>Загрузить фото</title>
+</head>
+<body>
+<form method="post" enctype="multipart/form-data" th:object="${quiz}" th:action="@{/quiz/{id}/edit/image(id=${quiz.getIdQuiz()})}" class="main_form">
+  <div class="form_box">
+    <label class="input-file">
+      <span class="input-file-text" id="file_name" type="text"></span>
+      <input type="file" name="file" id="file_upload">
+      <span class="input-file-btn">Выберите файл</span>
+      <button type="submit" class="btn_save">Сохранить</button>
+    </label>
+  </div>
+  <input type="hidden" th:field="*{idQuiz}">
+  <input type="hidden" th:field="*{questions}">
+  <input type="hidden" th:field="*{nameQuiz}">
+  <input type="hidden" th:field="*{user}">
+  <input type="hidden" name="questionIndex" th:value="${questionIndex}">
+</form>
+
+<script src="https://snipp.ru/cdn/jquery/2.1.1/jquery.min.js"></script>
+<script src="/js/validation/editImage.js"></script>
+</body>
+</html>

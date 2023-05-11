@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Редактирование</title>
+    <link rel="stylesheet" href="/css/editQuiz.css" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+</head>
+<body>
+<form th:method="post" th:action="@{/quiz/{id}/edit(id=${editQuiz.getIdQuiz()})}" th:object="${editQuiz}" class="main_form" id="edit_form" onsubmit="return isValid();">
+  <div class="quiz_box">
+    <header>
+      <div class="title">
+        <label class="title_info">Название викторины:</label>
+        <input class="name_quiz" th:field="*{nameQuiz}" type="text">
+      </div>
+    </header>
+    <section th:each="question, statQuestion: *{questions}">
+      <div class="que_text">
+        <label class="new_question" th:text="${'Вопрос № ' + statQuestion.count} + ':'">Вопрос № 1:</label>
+        <input class="new_question" th:field="*{questions[__${statQuestion.index}__].description}" type="text">
+        <button class="remove_button" name="removeEditQuestion" th:value="${statQuestion.index}"><img class="remove_img" src="/images/remove.png"></button>
+      </div>
+      <div class="que_img" th:if="${question.getPhotoBase64() != null}">
+        <img class="question_img" th:src="'data:image/jpeg;base64,' +*{questions[__${statQuestion.index}__].photoBase64}">
+        <button class="remove_button" name="removeImagesEditQuestion" th:value="${statQuestion.index}"><img class="remove_img" src="/images/remove.png"></button>
+      </div>
+      <div class="que_add_img" th:if="${question.getPhotoBase64() == null}">
+        <button class="next_btn" name="updateImageQuestion" th:value="${statQuestion.index}">Добавить фото</button>
+      </div>
+      <div class="option_list">
+        <div class="option" th:each="answer, answerStat : *{questions[__${statQuestion.index}__].answers}">
+          <input type="text" th:field="*{questions[__${statQuestion.index}__].answers[__${answerStat.index}__].description}" placeholder="Вариант ответа: 'Какой-то ответ'" class="new_answer"/>
+          <input class="checkbox_new_answer" th:field="*{questions[__${statQuestion.index}__].answers[__${answerStat.index}__].answer}" type="checkbox"/>
+          <button class="remove_button" name="removeEditAnswer" th:value="${statQuestion.index +':'+ answerStat.index}"><img class="remove_img" src="/images/remove.png"></button>
+        </div>
+        <button th:if="*{questions[__${statQuestion.index}__].answers.size() != 6}" name="addNewAnswer" th:value="${statQuestion.index}" class="next_btn">Добавить ответ</button>
+      </div>
+      <button th:if="${statQuestion.last == true}" name="addNewQuestions" class="next_btn">Добавить вопрос</button>
+    </section>
+    <!-- footer of Quiz Box -->
+    <footer>
+      <input type="submit" name="saveEditQuestions" class="next_btn" value="Сохранить"/>
+      <button class="next_btn" name="cancelEditQuiz">Сбросить</button>
+    </footer>
+  </div>
+  <input type="hidden"  th:field="*{idQuiz}">
+  <input type="hidden" th:field="*{questions}">
+</form>
+  <script src="/js/editQuizAnimation.js"></script>
+  <script src="/js/validation/editForm.js"></script>
+</body>
+</html>

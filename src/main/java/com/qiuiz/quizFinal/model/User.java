@@ -39,6 +39,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "current_user", fetch = FetchType.EAGER)
     private List<HistoryGames> historyGames = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Quiz> quizList = new ArrayList<>();
+
     public User() {
     }
 
@@ -49,6 +52,14 @@ public class User implements UserDetails {
         this.rolesList.add(roles);
         this.photo = photo;
         this.user_about = user_about;
+    }
+
+    public List<Quiz> getQuizList() {
+        return quizList;
+    }
+
+    public void setQuizList(List<Quiz> quizList) {
+        this.quizList = quizList;
     }
 
     public int getIduser() {

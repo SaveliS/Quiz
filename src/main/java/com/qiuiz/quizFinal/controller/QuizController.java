@@ -3,6 +3,7 @@ package com.qiuiz.quizFinal.controller;
 import com.qiuiz.quizFinal.model.Answer;
 import com.qiuiz.quizFinal.model.Question;
 import com.qiuiz.quizFinal.model.Quiz;
+import com.qiuiz.quizFinal.model.User;
 import com.qiuiz.quizFinal.repository.AnswerRepository;
 import com.qiuiz.quizFinal.repository.QuestionRepository;
 import com.qiuiz.quizFinal.repository.QuizRepository;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -71,10 +74,6 @@ public class QuizController {
 
     @RequestMapping(value = "/new",params = {"checkNewQuiz"})
     public String checkNewQuiz(final Quiz quiz,BindingResult result, Model model){
-//        if(result.hasErrors()){
-//            model.addAttribute("errors", result.getAllErrors());
-//            return "newQuiz/newQuestions";
-//        }
         allQuestionInQuiz.add(quiz.getQuestions().get(quiz.getQuestions().size() - 1));
         quiz.setQuestions(allQuestionInQuiz);
         model.addAttribute("finalQuiz", quiz);
@@ -83,11 +82,6 @@ public class QuizController {
 
     @RequestMapping(value = "/new",params = {"addNewQuestion"})
     public String addNewQuestion(@Valid final Quiz quiz, @Valid Question question,BindingResult result, Model model) {
-//        if(result.hasErrors()){
-//            model.addAttribute("errors", result.getAllErrors());
-//            model.addAttribute("newQuiz", quiz);
-//            return "newQuiz/newQuestions";
-//        }
         allQuestionInQuiz.add(quiz.getQuestions().get(quiz.getQuestions().size() - 1));
         quiz.getQuestions().add(CreateQuest(quiz));
         model.addAttribute("newQuiz", quiz);
@@ -156,30 +150,119 @@ public class QuizController {
         model.addAttribute("idUser",userRepository.findByUsername(login));
         return "home";
     }
+    @RequestMapping(value = "/{id}/edit", params = {"removeImagesEditQuestion"})
+    public String removeImageEditQuestion(final Quiz quiz, final HttpServletRequest reg, Model model){
+        final Integer questionIndex = Integer.valueOf(reg.getParameter("removeImagesEditQuestion"));
+        if(quiz.getQuestions().get(questionIndex).getIdQuestion() != 0){
+            quiz.getQuestions().get(questionIndex).setImage_questions(null);
+            questionRepository.save(quiz.getQuestions().get(questionIndex));
+        }
+        quiz.getQuestions().get(questionIndex).setImage_questions(null);
+        model.addAttribute("editQuiz", quiz);
+        return "editQuiz/editQuiz";
+    }
+
+    private Question updateImageQuest;
+    @RequestMapping(value = "/{id}/edit", params = {"updateImageQuestion"})
+    public String updateImageEditQuestion(final Quiz quiz, final HttpServletRequest reg ,Model model){
+        final Integer questionIndex = Integer.valueOf(reg.getParameter("updateImageQuestion"));
+        quiz.getQuestions().get(questionIndex).setQuiz(quiz);
+        updateImageQuest = quiz.getQuestions().get(questionIndex);
+        model.addAttribute("quiz", quiz);
+        model.addAttribute("questionIndex", questionIndex);
+        return "editQuiz/editImage";
+    }
+
+    @GetMapping("/{id}/remove")
+    public String RemoveQuiz(@PathVariable("id") int id,
+                             @RequestParam(value = "confirmed", required = false) Boolean confirmed,
+                             Model model, @AuthenticationPrincipal User user){
+        if(confirmed){
+            for (Question question: quizRepository.findById(id).get().getQuestions()){
+                for (Answer answer: question.getAnswers()){
+                    answerRepository.deleteById(answer.getAnswerId());
+                }
+                questionRepository.deleteById(question.getIdQuestion());
+            }
+            quizRepository.deleteById(id);
+        }
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("loginUser", login);
+        model.addAttribute("idUser",userRepository.findByUsername(login));
+        log.info("Name login: {}", login);
+        return "home";
+    }
+
+    @RequestMapping(value = "/{id}/edit", params = {"cancelEditQuiz"})
+    public String cancelEditQuiz(Model model){
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("loginUser", login);
+        model.addAttribute("idUser",userRepository.findByUsername(login));
+        return "home";
+    }
 
     @RequestMapping(value = "/{id}/edit", params = {"addNewAnswer"})
     public String addNewAnswerEditForm(final Quiz editQuiz, final HttpServletRequest req, Model model) {
-        final Integer QuestionID = Integer.valueOf(req.getParameter("addNewAnswer"));
-        log.info("Couter answer: {}", QuestionID);
-        editQuiz.getQuestions().get(QuestionID).getAnswers().add(new Answer());
+        final Integer QuestionIndex = Integer.valueOf(req.getParameter("addNewAnswer"));
+        log.info("Couter answer: {}", QuestionIndex);
+        editQuiz.getQuestions().get(QuestionIndex).getAnswers().add(new Answer());
         model.addAttribute("editQuiz", editQuiz);
-        return "edit";
+        return "editQuiz/editQuiz";
     }
 
     @RequestMapping(value = "/{id}/edit", params = {"addNewQuestions"})
     public String addNewQuestionsEditForm(final Quiz editQuiz, Model model) {
         log.info("ID Quiz: {}", editQuiz.getIdQuiz());
-        editQuiz.getQuestions().add(new Question());
+        Question newQuestion = new Question();
+        newQuestion.getAnswers().add(new Answer());
+        newQuestion.getAnswers().add(new Answer());
+        editQuiz.getQuestions().add(newQuestion);
         model.addAttribute("editQuiz", editQuiz);
-        return "edit";
+        return "editQuiz/editQuiz";
+    }
+
+    @RequestMapping(value = "/{id}/edit", params = {"removeEditQuestion"})
+    public String RemoveQuestion(final Quiz editQuiz, final HttpServletRequest reg, Model model){
+        final int indexQuestion = Integer.valueOf(reg.getParameter("removeEditQuestion"));
+        if(editQuiz.getQuestions().get(indexQuestion).getIdQuestion() != 0){
+            for(Answer answer: editQuiz.getQuestions().get(indexQuestion).getAnswers()){
+                answerRepository.deleteById(answer.getAnswerId());
+            }
+            questionRepository.deleteById(editQuiz.getQuestions().get(indexQuestion).getIdQuestion());
+        }
+        log.info("Quiz question: {}", editQuiz.getQuestions());
+        editQuiz.getQuestions().remove(indexQuestion);
+        log.info("Quiz question: {}", editQuiz.getQuestions());
+        model.addAttribute("editQuiz", editQuiz);
+        return "editQuiz/editQuiz";
+    }
+
+    @RequestMapping(value = "/{id}/edit", params = {"removeEditAnswer"})
+    public String RemoveAnswer(final Quiz editQuiz,final HttpServletRequest reg, Model model){
+        // Получаем параметры: Индекс вопроса, Индекс ответа.
+        String valueForms = reg.getParameter("removeEditAnswer");
+        String [] value = valueForms.split(":");
+        log.info("\nEdit question: {}", value[0]);
+        log.info("\nEdit answer: {}", value[1]);
+
+        // Находим данный вопрос в Quiz, удаляем от туда ответ по индексу.
+        int indexAnswer = Integer.valueOf(value[1]);
+        // Если записи нет в БД, то просто удаляем из списка.
+        if(editQuiz.getQuestions().get(Integer.valueOf(value[0])).getAnswers().get(indexAnswer).getAnswerId() != 0){
+            answerRepository.deleteById(editQuiz.getQuestions().get(Integer.valueOf(value[0])).getAnswers().get(indexAnswer).getAnswerId());
+        }
+        editQuiz.getQuestions().get(Integer.valueOf(value[0])).getAnswers().remove(indexAnswer);
+        // Отправляем обратно измененную викторину.
+        model.addAttribute("editQuiz", editQuiz);
+        return "editQuiz/editQuiz";
     }
 
     @RequestMapping(value = "/{id}/edit", params = {"saveEditQuestions"})
-    public String saveEditQuiz(final Quiz editQuiz) {
+    public String saveEditQuiz(final Quiz editQuiz, Model model, @AuthenticationPrincipal User user) {
         for (Question question : editQuiz.getQuestions()) {
             question.setQuiz(editQuiz);
+            log.info("Question ID: {}. \nQuestion des: {}. \nQuestions to quiz: {}.\n Question Image: {}.", question.getIdQuestion(), question.getDescription(), question.getQuiz().getIdQuiz(), question.getImage_questions());
             if (question.getIdQuestion() == 0) {
-                log.info("Question ID: {}. Question des: {}. Questions to quiz: {}", question.getIdQuestion(), question.getDescription(), question.getQuiz().getIdQuiz());
                 questionRepository.save(question);
             }
             for (Answer answer : question.getAnswers()) {
@@ -188,7 +271,8 @@ public class QuizController {
                 answerRepository.save(answer);
             }
         }
-        return "redirect:/quiz/all";
+        model.addAttribute("currentUser", userRepository.findById(user.getIduser()).get());
+        return "profile/userQuizList";
     }
 
     @GetMapping("/new")
@@ -211,13 +295,26 @@ public class QuizController {
     @GetMapping("/{id}/edit")
     public String editQuiz(@PathVariable("id") int id, Model model) {
         model.addAttribute("editQuiz", quizRepository.findById(id).get());
-        return "/edit";
+        return "editQuiz/editQuiz";
     }
+
 
     @PostMapping("/new/updateImage")
     public String updateImage(@RequestParam MultipartFile file, Model model) throws IOException {
         newQuizs.getQuestions().get(newQuizs.getQuestions().size() - 1).setImage_questions(file.getBytes());
         model.addAttribute("newQuiz", newQuizs);
         return "newQuiz/newQuestions";
+    }
+
+    @PostMapping("/{id}/edit/image")
+    public String updateImageEditQuestion(@RequestParam MultipartFile file, Model model,
+                                          final Quiz quiz, @RequestParam String questionIndex) throws IOException{
+        log.info("Quiz ID: {} \n Quiz question: {}", quiz.getIdQuiz(), quiz.getQuestions());
+        log.info("Question Index: {}", questionIndex);
+        quiz.getQuestions().set(Integer.valueOf(questionIndex),updateImageQuest);
+        quiz.getQuestions().get(Integer.valueOf(questionIndex)).setImage_questions(file.getBytes());
+        questionRepository.save(quiz.getQuestions().get(Integer.valueOf(questionIndex)));
+        model.addAttribute("editQuiz", quiz);
+        return "editQuiz/editQuiz";
     }
 }

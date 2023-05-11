@@ -89,6 +89,8 @@ public class Question {
         return Base64.getEncoder().encodeToString(getImage_questions());
     }
 
+
+
     public void setImage_questions(byte[] image_questions) {
         this.image_questions = image_questions;
     }

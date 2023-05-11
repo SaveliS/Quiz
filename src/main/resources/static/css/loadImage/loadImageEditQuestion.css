@@ -1,0 +1,117 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    padding: 35px;
+    background: #007bff;
+}
+
+.main_form .form_box{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.form_box{
+    width: 350px;
+    background: #fff;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+    height: 150px;
+    opacity: 1;
+    z-index: 5;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.btn_save{
+    height: 30px;
+    margin: 2px;
+    font-size: 16px;
+    font-weight: 200;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    background: #007bff;
+    border: 1px solid #007bff;
+    line-height: 10px;
+    opacity: 1;
+    transform: scale(0.95);
+    transition: all 0.3s ease;
+}
+
+.input-file {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.input-file-text {
+    padding: 0 10px;
+    line-height: 40px;
+    text-align: left;
+    height: 40px;
+    display: block;
+    float: left;
+    box-sizing: border-box;
+    width: 200px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+}
+.input-file-btn {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    font-size: 14px;
+    vertical-align: middle;
+    color: rgb(255 255 255);
+    text-align: center;
+    border-radius: 4px;
+    background-color: #007bff;
+    line-height: 22px;
+    height: 40px;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    border: none;
+    margin: 0;
+    transition: background-color 0.2s;
+}
+.input-file input[type=file] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    display: block;
+    width: 0;
+    height: 0;
+}
+
+/* Focus */
+.input-file input[type=file]:focus + .input-file-btn {
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Hover/Active */
+.input-file:hover .input-file-btn {
+    background-color: #509df0;
+}
+.input-file:active .input-file-btn {
+    background-color: #1a66b8;
+}
+
+/* Disabled */
+.input-file input[type=file]:disabled + .input-file-btn {
+    background-color: #eee;
+}

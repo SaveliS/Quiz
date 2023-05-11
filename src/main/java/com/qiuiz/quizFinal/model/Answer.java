@@ -14,7 +14,6 @@ public class Answer {
     private int answerId;
     @Column(name = "description")
     @NotBlank(message = "Заполните поле.")
-    @Size(min = 3, message = "Название должно содержать минимум 3 символа.")
     private String description;
     @Column(name = "isanswer")
     private boolean isAnswer;

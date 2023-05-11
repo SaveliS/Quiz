@@ -1,6 +1,7 @@
 package com.qiuiz.quizFinal.controller;
 
 import com.qiuiz.quizFinal.model.HistoryGames;
+import com.qiuiz.quizFinal.model.Quiz;
 import com.qiuiz.quizFinal.model.User;
 import com.qiuiz.quizFinal.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -111,5 +112,16 @@ public class UserProfileController {
         model.addAttribute("currentUser",user);
 
         return "profile/updateImage";
+    }
+
+    @GetMapping("/{id}/quiz")
+    public String getUserQuiz(@AuthenticationPrincipal User user, Model model){
+        model.addAttribute("currentUser", user);
+        log.info("Зашел");
+        for(Quiz quiz: user.getQuizList()){
+            log.info("Size: {}", quiz.getQuestions());
+        }
+        log.info("Вышел");
+        return "profile/userQuizList";
     }
 }

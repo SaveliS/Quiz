@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ваши викторины</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/userQuizAll.css">
+</head>
+<body>
+<form class="py-5 my-5" th:object="${currentUser}">
+  <div class="container">
+    <h1 class="mb-5">Ваши викторины</h1>
+    <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+      <div class="tab-content p-4 p-md-5" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
+          <table class="table">
+            <tr>
+              <th>№</th>
+              <th>Название</th>
+              <th>Кол-во вопросов</th>
+              <th>Создатель</th>
+              <th>Редактировать</th>
+              <th>Удалить</th>
+            </tr>
+            <tr th:each="quiz, quizStat: *{quizList}">
+              <td th:text="${quizStat.count}">1</td>
+              <td th:text="${quiz.nameQuiz}">Викторина</td>
+              <td th:text="${quiz.questions.size()}">10</td>
+              <td th:text="${quiz.getUser().getUsername()}">test</td>
+              <td><a th:href="@{/quiz/{id}/edit(id=${quiz.getIdQuiz()})}"><img class="myImage" src="/images/edit.png"></a></td>
+              <td><a th:href="@{/quiz/{id}/remove(id=${quiz.getIdQuiz()})}" th:attr="onclick=|confirmDelete('${quiz.getIdQuiz()}',event)|"><img class="removeImage" src="/images/remove.png"></a></td>
+            </tr>
+          </table>
+          <button class="back_button">Назад</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<script src="/js/editQuizAllUser.js"></script>
+</body>
+</html>

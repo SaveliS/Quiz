@@ -1,0 +1,104 @@
+:root{
+    --background-colors: #FDB095;
+    --dark-text-colors: #210440;
+    --light-text-colors: #fff;
+    --profile-user-colors: #ffE7d0;
+}
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+body {
+    background: #007bff;
+    font-family: 'Poppins', sans-serif;
+}
+.shadow {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.profile-tab-nav {
+    min-width: 250px;
+}
+.mb-5{
+    color: #fff;
+}
+.tab-content {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.nav-pills a.nav-link {
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    color: #fff;
+}
+.nav-pills a.nav-link i {
+    width: 20px;
+}
+
+.img-circle img {
+    height: 100px;
+    width: 100px;
+    border-radius: 100%;
+    border: 5px solid #fff;
+}
+.table {
+    text-align: center;
+    margin: 5px;
+    width: 100%;
+    margin-bottom: 20px;
+    border: 5px solid #fff;
+    border-top: 5px solid #fff;
+    border-bottom: 3px solid #fff;
+    border-collapse: collapse;
+    outline: 3px solid #007bff;
+    font-size: 15px;
+    background: #fff!important;
+}
+.table th {
+    font-weight: bold;
+    padding: 7px;
+    background: #007bff;
+    border: none;
+    text-align: center;
+    font-size: 15px;
+    border-top: 3px solid #fff;
+    border-bottom: 3px solid #007bff;
+    color: #fff;
+}
+.table td {
+    padding: 7px;
+    border: none;
+    border-top: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    font-size: 15px;
+    text-align: center;
+    vertical-align: middle;
+}
+.table tbody tr:nth-child(even){
+    background: #f8f8f8!important;
+}
+.table img{
+    margin: 2px;
+    height: 30px;
+    width: 30px;
+}
+.back_button{
+    height: 40px;
+    padding: 0 13px;
+    font-size: 18px;
+    font-weight: 400;
+    width: 250px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    background: #007bff;
+    border: 1px solid #007bff;
+    line-height: 10px;
+    opacity: 1;
+    transform: scale(0.95);
+    transition: all 0.3s ease;
+}
