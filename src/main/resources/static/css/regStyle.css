@@ -152,3 +152,9 @@ body {
         row-gap: 15px;
     }
 }
+
+.error{
+    color:red;
+    font-size: 10px;
+    margin: 2px;
+}

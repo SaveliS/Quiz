@@ -29,6 +29,9 @@ public class User implements UserDetails {
     private byte [] photo;
     @Column(name = "user_about")
     private String user_about;
+    @Column(name = "enable")
+    private boolean enable;
+
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
@@ -42,16 +45,28 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Quiz> quizList = new ArrayList<>();
 
+    @OneToOne(targetEntity = Token.class, fetch = FetchType.EAGER, mappedBy = "user")
+    private Token token;
+
     public User() {
     }
 
-    public User(String username, String password, String email, Roles roles, byte [] photo, String user_about) {
+    public User(String username, String password, String email, Roles roles, byte [] photo, String user_about, boolean enable) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.rolesList.add(roles);
         this.photo = photo;
         this.user_about = user_about;
+        this.enable = enable;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 
     public List<Quiz> getQuizList() {
@@ -155,6 +170,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enable;
     }
 }

@@ -6,11 +6,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 
 @Data
 @Slf4j
@@ -24,6 +19,6 @@ public class RegistrationForm {
         log.info("password: {}",password);
         log.info("Password encoder: {}", passwordEncoder.encode(password));
         log.info("email");
-        return new User(username,password,email,new Roles("ROLE_USER"),null, null);
+        return new User(username,password,email,new Roles("ROLE_USER"),null, null, false);
     }
 }

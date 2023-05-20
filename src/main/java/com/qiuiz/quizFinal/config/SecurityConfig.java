@@ -2,7 +2,10 @@ package com.qiuiz.quizFinal.config;
 
 import com.qiuiz.quizFinal.model.User;
 import com.qiuiz.quizFinal.repository.UserRepository;
+import com.qiuiz.quizFinal.service.CustomAuthenticationFailureHandler;
+import com.qiuiz.quizFinal.service.CustomAuthenticationSuccessHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,18 +42,30 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/game/**", "/register/**","/", "/css/**",
-                                "/logout_user","/js/**","/images/**").permitAll()
-                        .requestMatchers("/quiz/**","/questions/**","/profile/**").hasRole("USER")
-                        .anyRequest().denyAll())
+                        .requestMatchers("/quiz/**","/questions/**",
+                                "/profile/**","/game/**").hasRole("USER")
+                        .requestMatchers( "/register/**","/", "/css/**",
+                                "/logout_user","/js/**","/images/**","/activate").permitAll()
+                        .anyRequest().permitAll())
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(customAuthenticationSuccessHandler())
+                        .failureHandler(customAuthenticationFailureHandler())
                         .permitAll())
                 .logout((logout) -> logout
                         .logoutUrl("/logout_user")
                         .logoutSuccessUrl("/")
                         .permitAll())
                 .build();
+    }
+
+    @Bean
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler(){
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 }

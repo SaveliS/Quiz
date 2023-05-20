@@ -145,3 +145,8 @@ input[type="submit"]:hover{
 .signup_link a:hover{
     text-decoration: underline;
 }
+.error{
+    color:red;
+    font-size: 10px;
+    margin: 2px;
+}

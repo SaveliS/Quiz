@@ -19,8 +19,9 @@
             <span></span>
             <label>Пароль</label>
         </div>
-        <div class="pass">Forgot Password?</div>
-        <input type="submit" value="Login">
+        <div th:if="${param.error != null}" class="error">Неправильное имя пользователя или пароль</div>
+        <div class="pass"><a th:href="@{/recovery}">Забыли пароль?</a></div>
+        <input type="submit" value="Авторизация">
         <div class="signup_link">
             Новенький? <a th:href="@{/register}">Присоединяйся</a>
         </div>

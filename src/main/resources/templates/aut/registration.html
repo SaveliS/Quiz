@@ -21,6 +21,7 @@
         <div class="input-box">
             <label>Электронная почта</label>
             <input type="text" th:field="*{email}" placeholder="Электронная почта" required />
+            <label th:if="${emailError == true}" class="error">Почта зарегистрирована.</label>
         </div>
         <button type="submit">Регистрация</button>
     </form>

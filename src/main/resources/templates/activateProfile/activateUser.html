@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/activateAccount.css">
+</head>
+<body>
+<div class="container">
+    <div class="message_box">
+        <div class="title_text">
+            <label>Подтвердите почту</label>
+        </div>
+        <div class="info_text">
+            <label>На ваш электронный адрес отправлено письмо, чтобы подтвердить аккаунт, перейдите по ссылке.</label>
+        </div>
+        <div class="email_text">
+            <label th:text="${email}"></label>
+        </div>
+    </div>
+</div>
+</body>
+</html>
