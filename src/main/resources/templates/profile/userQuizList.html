@@ -33,7 +33,7 @@
               <td><a th:href="@{/quiz/{id}/remove(id=${quiz.getIdQuiz()})}" th:attr="onclick=|confirmDelete('${quiz.getIdQuiz()}',event)|"><img class="removeImage" src="/images/remove.png"></a></td>
             </tr>
           </table>
-          <button class="back_button">Назад</button>
+          <button name="cancel" class="back_button">Назад</button>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 </head>
 <body>
-<form th:method="post" th:action="@{/quiz/new}" th:object="${newQuiz}" class="main_form">
+<form th:method="post" th:action="@{/quiz/new}" th:object="${newQuiz}" id="quizForm" class="main_form" onsubmit="return isValid();">
   <input type="hidden" th:field="*{questions}">
   <div class="quiz_box">
     <header>
@@ -41,6 +41,7 @@
     <input type="hidden" th:field="*{questions[__${statQuiz.index}__].image_questions}">
   </div>
   <input type="hidden" th:field="*{idQuiz}">
+  <script src="/js/validation/newQuiz.js"></script>
 </form>
 </body>
 </html>

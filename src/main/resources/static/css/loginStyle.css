@@ -42,7 +42,7 @@
 body{
     margin: 0;
     padding: 0;
-    background: var(--body-color);
+    background: #007bff;
     height: 100vh;
     overflow: hidden;
 }

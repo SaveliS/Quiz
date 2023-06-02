@@ -1,14 +1,9 @@
 package com.qiuiz.quizFinal.controller;
 
-import com.qiuiz.quizFinal.model.Answer;
-import com.qiuiz.quizFinal.model.Question;
-import com.qiuiz.quizFinal.model.Quiz;
-import com.qiuiz.quizFinal.model.User;
-import com.qiuiz.quizFinal.repository.AnswerRepository;
-import com.qiuiz.quizFinal.repository.QuestionRepository;
-import com.qiuiz.quizFinal.repository.QuizRepository;
-import com.qiuiz.quizFinal.repository.UserRepository;
+import com.qiuiz.quizFinal.model.*;
+import com.qiuiz.quizFinal.repository.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +24,9 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/quiz")
-@SessionAttributes("Quiz")
 public class QuizController {
 
-    private List<Question> allQuestionInQuiz = new ArrayList<>();
+    private final List<Question> allQuestionInQuiz = new ArrayList<>();
     private Quiz newQuizs;
     @Autowired
     private QuizRepository quizRepository;
@@ -40,6 +34,9 @@ public class QuizController {
     private QuestionRepository questionRepository;
     @Autowired
     private AnswerRepository answerRepository;
+
+    @Autowired
+    private HistoryRepository historyRepository;
 
     /**
      * Репозиторий для управления пользователями из БД.
@@ -55,7 +52,6 @@ public class QuizController {
     public Quiz createQuiz() {
         return new Quiz();
     }
-
     @RequestMapping(value = "/new",params = {"loadImageQuestion"})
     public String loadImageQuestion(final Quiz quiz,final HttpServletRequest reg, Model model){
         final Integer questionID = Integer.valueOf(reg.getParameter("loadImageQuestion"));
@@ -66,6 +62,9 @@ public class QuizController {
 
     @RequestMapping(value = "/new", params = {"addNewAnswer"})
     public String addNewAnswer(final Quiz quiz, Model model){
+        if(quiz.getQuestions().get(quiz.getQuestions().size() - 1).getImage_questions().length == 0){
+            quiz.getQuestions().get(quiz.getQuestions().size() - 1).setImage_questions(null);
+        }
         quiz.getQuestions().get(quiz.getQuestions().size() - 1).getAnswers().add(new Answer());
         log.info("Quiz: {}", quiz.getNameQuiz());
         model.addAttribute("newQuiz", quiz);
@@ -89,24 +88,25 @@ public class QuizController {
     }
 
     @RequestMapping(value = "/new", params = {"SaveNewQuiz"})
-    public String SaveNewQuiz(final Quiz  quiz,Model model){
+    public String SaveNewQuiz(final Quiz  quiz,Model model, @AuthenticationPrincipal User autUser){
+        User user = userRepository.findByUsername(autUser.getUsername());
         quiz.setQuestions(allQuestionInQuiz);
+        if(user != null){
+            quiz.setUser(user);
+        }
         quizRepository.save(quiz);
         for (Question question: allQuestionInQuiz){
             question.setQuiz(quiz);
+            if(question.getImage_questions().length == 0){
+                question.setImage_questions(null);
+            }
             questionRepository.save(question);
             for (Answer answer : question.getAnswers()){
                 answer.setQuestion(question);
-                log.info("Answer question ID: {}", answer.getQuestion().getIdQuestion());
-                log.info("Answer description: {}", answer.getDescription());
-                log.info("Answer ID: {}", answer.getAnswerId());
                 answerRepository.save(answer);
-                log.info("Answer question ID: {}", answer.getQuestion().getIdQuestion());
-                log.info("Answer description: {}", answer.getDescription());
-                log.info("Answer ID: {}", answer.getAnswerId());
             }
         }
-
+        allQuestionInQuiz.clear();
         return cancelCreateQuiz(model);
     }
 
@@ -150,6 +150,7 @@ public class QuizController {
         model.addAttribute("idUser",userRepository.findByUsername(login));
         return "home";
     }
+
     @RequestMapping(value = "/{id}/edit", params = {"removeImagesEditQuestion"})
     public String removeImageEditQuestion(final Quiz quiz, final HttpServletRequest reg, Model model){
         final Integer questionIndex = Integer.valueOf(reg.getParameter("removeImagesEditQuestion"));
@@ -183,6 +184,9 @@ public class QuizController {
                     answerRepository.deleteById(answer.getAnswerId());
                 }
                 questionRepository.deleteById(question.getIdQuestion());
+            }
+            for (HistoryGames history: quizRepository.findById(id).get().getHistoryGames()){
+                historyRepository.deleteById(history.getId());
             }
             quizRepository.deleteById(id);
         }
@@ -258,7 +262,7 @@ public class QuizController {
     }
 
     @RequestMapping(value = "/{id}/edit", params = {"saveEditQuestions"})
-    public String saveEditQuiz(final Quiz editQuiz, Model model, @AuthenticationPrincipal User user) {
+    public String saveEditQuiz(Quiz editQuiz, Model model, @AuthenticationPrincipal User user) {
         for (Question question : editQuiz.getQuestions()) {
             question.setQuiz(editQuiz);
             log.info("Question ID: {}. \nQuestion des: {}. \nQuestions to quiz: {}.\n Question Image: {}.", question.getIdQuestion(), question.getDescription(), question.getQuiz().getIdQuiz(), question.getImage_questions());
@@ -317,4 +321,5 @@ public class QuizController {
         model.addAttribute("editQuiz", quiz);
         return "editQuiz/editQuiz";
     }
+
 }

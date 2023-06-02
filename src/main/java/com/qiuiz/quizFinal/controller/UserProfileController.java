@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,6 +50,14 @@ public class UserProfileController {
         return "profile/userProfile";
     }
 
+    @RequestMapping(value = "/{id}",params = {"getHome"})
+    public String CancelUserProfile(Model model){
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("loginUser", login);
+        model.addAttribute("idUser",userRepository.findByUsername(login));
+        return "home";
+    }
+
     @RequestMapping(value = "/{id}", params = {"UpdatePassword"})
     public String updatePassword(@RequestParam String oldPassword,@RequestParam String confirmPassword ,final User user,
                                  @AuthenticationPrincipal User autUser, Model model){
@@ -70,18 +79,16 @@ public class UserProfileController {
 
 
     /**
-     * @param name Имя загруженного документа.
-     * @param photo Документ выбранный для загрузки.
      * @param user Авторизированный пользователь.
      * @param model Модель для загрузки данных о пользователе на форму.
      * @return Страница пользователя с обновленными данными.
      * @throws IOException Если преобразование невозможно.
      */
     @PostMapping("/{id}")
-    public String updateImageUser(@RequestParam String name, @RequestParam MultipartFile photo,
+    public String updateImageUser(@RequestParam MultipartFile file,
                                   @AuthenticationPrincipal User user,Model model) throws IOException {
         User userInDB = userRepository.findByUsername(user.getUsername());
-        userInDB.setPhoto(photo.getBytes());
+        userInDB.setPhoto(file.getBytes());
         userRepository.save(userInDB);
         model.addAttribute("currentUser",userInDB);
 
@@ -110,18 +117,25 @@ public class UserProfileController {
     @GetMapping("/{id}/image")
     public String updateProfileUser(@AuthenticationPrincipal User user,Model model){
         model.addAttribute("currentUser",user);
-
         return "profile/updateImage";
     }
 
     @GetMapping("/{id}/quiz")
     public String getUserQuiz(@AuthenticationPrincipal User user, Model model){
-        model.addAttribute("currentUser", user);
+        model.addAttribute("currentUser", userRepository.findByUsername(user.getUsername()));
         log.info("Зашел");
         for(Quiz quiz: user.getQuizList()){
             log.info("Size: {}", quiz.getQuestions());
         }
         log.info("Вышел");
         return "profile/userQuizList";
+    }
+
+    @RequestMapping(value = "/{id}/quiz", params = {"cancel"})
+    public String ReturnBack(Model model){
+        String login = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("loginUser", login);
+        model.addAttribute("idUser",userRepository.findByUsername(login));
+        return "home";
     }
 }

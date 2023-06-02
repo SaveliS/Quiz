@@ -31,7 +31,7 @@
         <!-- footer of Quiz Box -->
         <footer>
             <div class="total_que">
-                <span><p th:text="${answerUser.couter}">1</p>из<p th:text="${questionsList.getAnswers().size()}">5</p></span>
+                <span><p th:text="${answerUser.couter}">1</p>из<p th:text="${questionsList.getAnswers().size() - 1}">5</p></span>
             </div>
             <button type="submit" class="next_btn" name="nextQuestion">Следующий вопрос</button>
         </footer>

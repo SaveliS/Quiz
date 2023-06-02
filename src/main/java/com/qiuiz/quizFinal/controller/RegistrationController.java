@@ -6,6 +6,7 @@ import com.qiuiz.quizFinal.model.support.RegistrationForm;
 import com.qiuiz.quizFinal.repository.TokenRepository;
 import com.qiuiz.quizFinal.repository.UserRepository;
 import com.qiuiz.quizFinal.service.EmailService;
+import com.qiuiz.quizFinal.service.PasswordService;
 import com.qiuiz.quizFinal.service.TokenService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,6 +30,9 @@ public class RegistrationController {
     private PasswordEncoder encoder;
     @Autowired
     private HttpServletRequest request;
+
+    @Autowired
+    private PasswordService passwordService;
     @Autowired
     private EmailService emailService;
     @Autowired
@@ -48,9 +52,19 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public String processRegistration(RegistrationForm form, Model model) throws MessagingException {
-        if(userRepo.findByEmail(form.getEmail()) != null){
+        if(userRepo.findByEmail(form.getEmail()) != null || !emailService.isValidEmail(form.getEmail())){
             model.addAttribute("reg", form);
             model.addAttribute("emailError", true);
+            return "aut/registration";
+        }
+        if(userRepo.findByUsername(form.getUsername()) != null){
+            model.addAttribute("reg",form);
+            model.addAttribute("userError",true);
+            return "aut/registration";
+        }
+        if(!passwordService.isValidPassword(form.getPassword())){
+            model.addAttribute("reg",form);
+            model.addAttribute("passwordError",true);
             return "aut/registration";
         }
         userRepo.save(form.toUser(encoder));

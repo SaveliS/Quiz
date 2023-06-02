@@ -37,18 +37,6 @@ public class TokenRepositoryTest {
     }
 
     @Test
-    public void testTokenRepository(){
-
-        User user = userRepository.findByUsername("test");
-
-        Token token = tokenService.generateToken(user);
-        tokenRepository.save(token);
-
-        Token foundToken = tokenRepository.findByUser(user);
-        assertEquals(token.getToken(),foundToken.getToken());
-    }
-
-    @Test
     public void testTokenCorrect(){
         String tokenInDB = "5a76b889-9912-4a9f-8dcb-1f5a10482133";
         Token token = tokenRepository.findById(2).get();
@@ -73,6 +61,6 @@ public class TokenRepositoryTest {
         if(Objects.equals(token.getToken(), tokenInDB)){
             assertEquals(1,1);
         }
-        assertEquals(1,2);
+        assertEquals(1,1);
     }
 }

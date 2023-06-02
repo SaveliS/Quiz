@@ -1,12 +1,10 @@
 package com.qiuiz.quizFinal.service;
 
-import com.qiuiz.quizFinal.model.User;
-import com.qiuiz.quizFinal.repository.UserRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
@@ -24,6 +22,10 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             log.info("Логин: {}",username);
             request.getSession().setAttribute("userName", username);
             setDefaultFailureUrl("/activate");
+        }
+        if(exception instanceof BadCredentialsException){
+            log.info("Ошибка: Введены неверные данные");
+            setDefaultFailureUrl("/login?error");
         }
         super.onAuthenticationFailure(request, response, exception);
     }

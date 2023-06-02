@@ -40,16 +40,9 @@ public class GamesController {
 
     @RequestMapping(value = "/{id}/start", params = {"nextQuestion"})
     public String nextQuestions(final Question question, final AnswerUser answerUser, Model model){
-        log.info("ID Questions: {}", question.getIdQuestion());
-        log.info("Answer user: {}", answerUser);
         log.info("Answer to questions: {}", question.getAnswers());
         log.info("ID quiz: {}", question.getQuiz());
         log.info("List questions: {}", quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions());
-        if(quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions().size() == answerUser.getCouter()){
-            model.addAttribute("points", answerUser.getPoint());
-            return "quizGame/scoreGame";
-        }
-        model.addAttribute("questionsList", quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions().get(answerUser.getCouter()));
         for (int id : answerUser.getCheckedItems()){
             if(answerRepository.findById(id).get().isAnswer()){
                 int points = answerUser.getPoint();
@@ -57,6 +50,11 @@ public class GamesController {
                 log.info("Points: {}", points);
             }
         }
+        if(quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions().size() == answerUser.getCouter()){
+            model.addAttribute("points", answerUser.getPoint());
+            return "quizGame/scoreGame";
+        }
+        model.addAttribute("questionsList", quizRepository.findById(question.getQuiz().getIdQuiz()).get().getQuestions().get(answerUser.getCouter()));
         int couter = answerUser.getCouter();
         couter++;
         answerUser.setCouter(couter);

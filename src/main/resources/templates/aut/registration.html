@@ -12,10 +12,12 @@
         <div class="input-box">
             <label>Имя</label>
             <input type="text" th:field="*{username}" placeholder="Полное имя" required />
+            <label th:if="${userError == true}" class="error">Пользователь зарегистрирован.</label>
         </div>
         <div class="input-box">
             <label>Пароль</label>
             <input type="text" th:field="*{password}" placeholder="Пароль" required />
+            <label th:if="${passwordError == true}" class="error">Пароль должен иметь минимум 8 символов.<br> И хотя бы одну цифру и букву.</label>
         </div>
 
         <div class="input-box">

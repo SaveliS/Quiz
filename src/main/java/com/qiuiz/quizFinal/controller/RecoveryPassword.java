@@ -58,9 +58,7 @@ public class RecoveryPassword {
                                       @RequestParam("email") String email,Model model){
         if(userRepository.findByEmail(email) != null){
             User user = userRepository.findByEmail(email);
-            log.info("Token user: {}", user.getToken().getToken());
-            log.info("Token URL: {}",token);
-            if(user.getToken().getToken() == tokenRepository.findByToken(token).getToken()){
+            if(user.getToken().getToken() == tokenRepository.findByToken(token).getToken() && tokenService.isTokenExpired(tokenRepository.findByToken(token))){
                 model.addAttribute("user", user);
                 return "recoveryPassword/recoveryPassword";
             }

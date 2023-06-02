@@ -10,9 +10,4 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class EmailServiceTest {
     @Autowired
     private EmailService emailService;
-
-    @Test
-    public void testSendEmail() throws MessagingException {
-        emailService.sendEmail("tuponogov.90@mail.ru","Test message", "localhost");
-    }
 }

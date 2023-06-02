@@ -44,7 +44,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 20px;
-    background: var(--body-color);
+    background: #007bff;
 }
 .container {
     position: relative;
@@ -68,9 +68,7 @@ body {
     width: 100%;
     margin-top: 20px;
 }
-.input-box label {
-    color: #333;
-}
+
 .form :where(.input-box input, .select-box) {
     position: relative;
     height: 50px;
@@ -138,10 +136,10 @@ body {
     border: none;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: rgb(130, 106, 251);
+    background: #007bff;
 }
 .form button:hover {
-    background: rgb(88, 56, 250);
+    background: #005bbf;
 }
 /*Responsive*/
 @media screen and (max-width: 500px) {
@@ -156,5 +154,5 @@ body {
 .error{
     color:red;
     font-size: 10px;
-    margin: 2px;
+    margin: 5px;
 }

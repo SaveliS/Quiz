@@ -6,6 +6,7 @@ import com.qiuiz.quizFinal.repository.TokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -36,5 +37,16 @@ public class TokenService {
         user.setToken(verificationToken);
         // Возвращаем новый токен.
         return verificationToken;
+    }
+
+    public boolean isTokenExpired(Token token){
+        LocalDateTime expiryDateFromDB = token.getExpiryDate();
+        LocalDateTime currentTime = LocalDateTime.now();
+        Duration duration = Duration.between(currentTime, expiryDateFromDB);
+        boolean isTokenExpired = duration.toMinutes() > 15;
+        if(isTokenExpired){
+            return false;
+        }
+        return true;
     }
 }
